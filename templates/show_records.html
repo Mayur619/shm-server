@@ -1,0 +1,31 @@
+<!doctype html>
+<title>Records</title>
+<style>
+table{
+	width:500px;
+}
+td {
+	width: 30px;
+}
+
+</style>
+<body>
+	<table>
+		<tr>
+			<th>RID</th>
+			<th>Timetamp</th>
+			<th>Heart rate</th>
+			<th>Oxygen levels</th>
+			<th>Temperature</th>
+		</tr>
+			{% for record in records %}
+				<tr>
+				{% for i in range(record|length)%}
+					<td>
+						{{record[i]}}
+					</td>
+				{% endfor %}
+				</tr>
+			{% endfor %}
+	<table>
+</body>
