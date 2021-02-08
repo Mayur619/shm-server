@@ -14,7 +14,6 @@ config_data = json.load(open("./config/mqtt_config.json","r"))
 
 IOT_PROTOCOL_NAME = "x-amzn-mqtt-ca"
 AWS_IOT_ENDPOINT = config_data['endpoint']
-#TOPIC = "arn:aws:iot:us-west-1:162600448216:thing/Sensor-data"
 ROOT_CA = config_data['ca_certificate_location']
 CERTIFICATE = config_data['pem_certificate_location']
 PRIVATE_KEY = config_data['private_key_location']
