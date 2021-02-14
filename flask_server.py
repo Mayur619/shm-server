@@ -12,7 +12,7 @@ class WebService(Thread):
         self.__create_routes()
     def __config_cors(self):
         self.__app.config['CORS_HEADERS'] = 'Content-Type'
-        cors = CORS(self.__app,resources = {r'/data/*':{'origins':'http://127.0.0.1:5000/'}})
+        cors = CORS(self.__app,resources = {r'/data/*':{'origins':'http://18.234.181.159:5000/'}})
     def __create_routes(self):
         @self.__app.route("/records",methods = ['GET'])
         def records():

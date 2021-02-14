@@ -8,17 +8,34 @@ class DatabaseService:
 
     def __init__(self,logger):
         self.__logger=logger
-        config_data = json.load(open("./config/db_config.json","r"))
+        self.__logger.info("Connecting")
+        self.config_data = json.load(open("./config/db_config.json","r"))
+        self.init_connection()
+        con = self.__database_connection.cursor()
+
+        #con.execute('SET GLOBAL connect_timeout=28800')
+        #con.execute('SET GLOBAL interactive_timeout=28800')
+        #con.execute('SET GLOBAL wait_timeout=28800')
+        self.__logger.info("Connected")
+        self.create_table()
+
+    def init_connection(self):
         self.__database_connection = mysqlCon.connect(
-          host=config_data['host'],
-          user=config_data['username'],
-          password=config_data['password'], 
-          db= config_data['dbname']
-        )
+        host=self.config_data['host'],
+        user=self.config_data['username'],
+        password=self.config_data['password'], 
+        db= self.config_data['dbname'])
+    def create_table(self):
+        #if not self.__database_connection.is_connected():
+        #    self.init_connection()
+        query_cursor=self.__database_connection.cursor()
+        query_cursor.execute("create table if not exists `Readings`(R_ID int primary key auto_increment,timestamp mediumtext,heart_rate int, oxygen int, temperature float);")        
 
     def get_db_connection(self):
         return self.__database_connection
     def insert_records(self,timestamp_arr,heart_arr,oxygen_arr,temp_arr):
+        #if not self.__database_connection.is_connected():
+        #    self.init_connection()
         for i in range(len(timestamp_arr)):
             query_cursor= self.__database_connection.cursor()
             insert_query = "INSERT INTO Readings (timestamp,heart_rate,oxygen,temperature) values(%s,%s,%s,%s)"
@@ -27,6 +44,8 @@ class DatabaseService:
             self.__database_connection.commit()
 
     def get_records(self):
+        #if not self.__database_connection.is_connected():
+        #    self.init_connection()
         select_cursor = self.__database_connection.cursor()
         select_cursor.execute("SELECT * FROM Readings")
         select_query_result = select_cursor.fetchall()
@@ -34,6 +53,8 @@ class DatabaseService:
         return select_query_result
     
     def generate_heartRate_json(self):
+        #if not self.__database_connection.is_connected():
+        #    self.init_connection()
         select_cursor = self.__database_connection.cursor()
         select_cursor.execute("SELECT timestamp,heart_rate FROM Readings")
         select_query_result = select_cursor.fetchall()
@@ -41,6 +62,8 @@ class DatabaseService:
         return heart_rate_data
     
     def generate_oxygenLevels_json(self):
+        #if not self.__database_connection.is_connected():
+        #    self.init_connection()
         select_cursor = self.__database_connection.cursor()
         select_cursor.execute("SELECT timestamp,oxygen FROM Readings")
         select_query_result = select_cursor.fetchall()
@@ -48,6 +71,8 @@ class DatabaseService:
         return oxygen_level_data
     
     def generate_temperature_json(self):
+        if not self.__database_connection.is_connected():
+            self.init_connection()
         select_cursor = self.__database_connection.cursor()
         select_cursor.execute("SELECT timestamp,temperature FROM Readings")
         select_query_result = select_cursor.fetchall()
