@@ -13,7 +13,7 @@ class DatabaseService:
         self.config_data = json.load(open("./config/db_config.json","r"))
         #self.init_connection()
 
-        con = self.__database_connection.cursor()
+        #con = self.__database_connection.cursor()
         self.__connection_pool = MySQLConnectionPool(pool_size=10,pool_name="Database pool",
                                                      host = self.config_data["host"],
                                                      database = self.config_data["dbname"],
