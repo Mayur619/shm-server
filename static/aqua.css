@@ -1,0 +1,11 @@
+:root{
+  --mainText:black;
+  --secondaryText:#363030;
+
+  --mainBackgroundColor : #66ffff;
+  --secondaryBackgroundColor :  #d6ffff;
+
+  --borderColor : #6a3030;
+
+  --frameBorder : #000000;
+}

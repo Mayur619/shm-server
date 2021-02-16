@@ -1,0 +1,115 @@
+:root{
+  --mainText:black;
+  --secondaryText:#363030;
+
+  --mainBackgroundColor : #D3D3D3;
+  --secondaryBackgroundColor : 	#ffffff;
+
+  --borderColor : #6a3030;
+
+  --frameBorder : #000000;
+}
+
+
+html, body{
+  padding: 0;
+  margin: 0;
+}
+h1, h2, h3, h4, h5, h6, strong, b
+{
+  color: var(--mainText);
+  font-family: 'Playfair Display', serif;
+}
+
+p, label, span, textarea, input{
+  color: var(--secondaryText);
+  font-family: 'Big Shoulders Display', cursive;
+}
+
+h1{font-size: 56px}
+h2{font-size: 40px}
+h3{font-size: 32px}
+h4{font-size: 26px}
+h5{font-size: 22px}
+h6{font-size: 20px}
+
+.section1{
+  background-color: var(--mainBackgroundColor);
+  border-top: : 1px solid var(--borderColor);
+  overflow: auto;
+  text-align: center;
+}
+
+.section2{
+  background-color: var(--secondaryBackgroundColor);
+  border-top : 1px solid var(--borderColor);
+  overflow: auto;
+  text-align: center;
+}
+
+.main-container{
+  width: 1200px;
+  margin: 0 auto;
+}
+#div1{
+    display: flex;
+    flex-direction:row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+.iclass{
+    margin: 50px;
+    width: 1000px;
+    border : 2px solid var(--frameBorder);
+
+    -webkit-box-shadow: 2px 0px 55px 16px rgba(0,0,0,0.63);
+-moz-box-shadow: 2px 0px 55px 16px rgba(0,0,0,0.63);
+box-shadow: 2px 0px 55px 16px rgba(0,0,0,0.63);
+}
+
+.iclass:hover{
+  border-width: 20px solid var(--frameBorder);
+}
+
+#theme-wrapper{
+  display: flex;
+  justify-content: center;
+}
+
+.theme-dot{
+  background-color: black;
+  height: 25px;
+  width: 25px;
+  margin: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px dashed var(--borderColor);
+}
+
+.theme-dot:hover{
+  border-width: 5px;
+}
+
+#light-mode{
+  background-color: white;
+}
+
+#orange-mode{
+  background-color: #ff6600;
+}
+#green-mode{
+  background-color: #00ff00;
+}
+#blue-mode{
+  background-color: #152028;
+}
+#aqua-mode{
+  background-color:  #66ffff;
+}
+
+@media screen and (max-width: 1200px){
+  .main-container{
+    width:95%;
+  }
+}

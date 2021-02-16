@@ -1,30 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" name="viewport" content="width=device-width" initial-scale=1>
+  <title>Smart Health Monitoring</title>
+  <link id="temp" rel="stylesheet" type="text/css" href="{{url_for('static',filename='default.css')}}">
+  <link id="theme-style" rel="stylesheet" type="text/css" href="">
+</head>
 <body>
-<style>
-div{
-    display: flex;
-    flex-direction:row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-.iclass{
-    margin: 20px;
-}
-</style>
-<div>
 
+<section class="section1">
+    <div class="main-container">
+      <h1>Smart Health Monitoring</h1>
+      <p>Click here to change theme</p>
+      <div id="theme-wrapper">
+        <div data-mode="light" class="theme-dot" id="light-mode"></div>
+        <div data-mode="orange" class="theme-dot" id="orange-mode"></div>
+        <div data-mode="green" class="theme-dot" id="green-mode"></div>
+        <div data-mode="blue" class="theme-dot" id="blue-mode"></div>
+        <div data-mode="aqua" class="theme-dot" id="aqua-mode"></div>
+      </div>
 
-<iframe class="iclass" src="http://18.234.181.159:5000/chart/heartrate"  width="800" height="500"/>
-</iframe>
+    </div>
+</section>
 
-<iframe class="iclass" src="http://18.234.181.159:5000/chart/oxygen"  width="800" height="500"/>
-</iframe>
+<section class="section2">
+  <div class="main-container">
+    <iframe id="heartRate" class="iclass" src="http://18.234.181.159:5000/chart/heartrate" width="800" height="500"/>
+    </iframe>
+  </div>
+</section>
 
+<section class="section1">
+  <div class="main-container">
+    <iframe id="oxygenLevel" class="iclass"  src="http://18.234.181.159:5000/chart/oxygen" width="800" height="500"/>
+    </iframe>
+  </div>
+</section>
 
-<iframe class="iclass" src="http://18.234.181.159:5000/chart/temperature"  width="1000" height="500"/>
-</iframe>
-</div>
+<section class="section2">
+  <div class="main-container">
+    <iframe id="temperature" class="iclass" src="http://18.234.181.159:5000/chart/temperature" width="1000" height="500"/>
+    </iframe>
+  </div>
+</section>
+
+<script type="text/javascript" src="{{url_for('static',filename='index.js')}}"></script>
 </body>
 </html>
