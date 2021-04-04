@@ -37,6 +37,7 @@ class DatabaseService:
         connection = self.__connection_pool.get_connection()
         if connection.is_connected():
             query_cursor=connection.cursor()
+            query_cursor.execure("drop table if exists Readings")
             query_cursor.execute('''create table if not exists `Readings`(R_ID int primary key auto_increment,timestamp mediumtext,
             heart_rate int, oxygen int, accel_x float, accel_y float, accel_z float, magneto_x float, magneto_y float, magneto_z float);''')
             query_cursor.close()
