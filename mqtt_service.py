@@ -34,7 +34,7 @@ class MqttService(Thread):
         self.__client = mqtt.Client(CLIENT_ID)
         self.__ssl_context = ssl.create_default_context()
         self.__db_client=db_client
-    
+
     def __config_ssl(self):
         try:
             self.__logger.info("open ssl version:{}".format(ssl.OPENSSL_VERSION))
@@ -56,7 +56,8 @@ class MqttService(Thread):
         number_of_readings = len(parsed_json["oxygen_level_readings"])
         delay = parsed_json["delay_interval"]
         timestamps = self.__generate_timestamps(number_of_readings,delay//1000)
-        self.__db_client.insert_records(timestamps,parsed_json["heart_rate_readings"],parsed_json["oxygen_level_readings"],parsed_json["temperature_readings"])
+        self.__db_client.insert_records(timestamps,parsed_json["heart_rate_readings"],parsed_json["oxygen_level_readings"],
+        parsed_json["accel_x"],parsed_json["accel_y"],parsed_json["accel_z"],parsed_json["magneto_x"],parsed_json["magneto_y"],parsed_json["magneto_z"])
         self.__logger.info("Successfully inserted {} records in the database".format(number_of_readings))
     def __generate_timestamps(self,n,delay):
         #current_timestamp = datetime.fromtimestamp(int(time.time()))

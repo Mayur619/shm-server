@@ -18,8 +18,8 @@ class WebService(Thread):
         def records():
             return render_template("show_records.html",
                                    records = self.__db_client.get_records())
-        
-        
+
+
         @self.__app.route("/chart/<name>",methods = ['GET'])
         def show_chart(name):
             if name == 'heartrate':
@@ -29,8 +29,8 @@ class WebService(Thread):
             else:
                 template_name = "show_temperature.html"
             return render_template(template_name)
-        
-        
+
+
         @self.__app.route("/data/<path:path>")
         @cross_origin()
         def send_json(path):
@@ -40,16 +40,16 @@ class WebService(Thread):
                 json_data=self.__db_client.generate_oxygenLevels_json()
             elif path=="temperature.json":
                 json_data=self.__db_client.generate_temperature_json()
-            
+
             return jsonify(json_data)
-        
+
         @self.__app.route("/",methods = ['GET'])
         def index():
             return render_template("index.html")
         self.__logger.info("Successfully registered all web routes")
-        
-        
-        
+
+
+
     def run(self):
         self.__logger.info("Initializing web server")
         self.__config_cors()
