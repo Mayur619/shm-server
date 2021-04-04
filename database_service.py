@@ -14,7 +14,7 @@ class DatabaseService:
         #self.init_connection()
 
         #con = self.__database_connection.cursor()
-        self.__connection_pool = MySQLConnectionPool(pool_size=10,pool_name="Database pool",
+        self.__connection_pool = MySQLConnectionPool(pool_size=10,pool_name="DatabasePool",
                                                      host = self.config_data["host"],
                                                      database = self.config_data["dbname"],
                                                      user = self.config_data["username"],
@@ -37,7 +37,7 @@ class DatabaseService:
         connection = self.__connection_pool.get_connection()
         if connection.is_connected():
             query_cursor=connection.cursor()
-            query_cursor.execure("drop table if exists Readings")
+            query_cursor.execute("drop table if exists Readings")
             query_cursor.execute('''create table if not exists `Readings`(R_ID int primary key auto_increment,timestamp mediumtext,
             heart_rate int, oxygen int, accel_x float, accel_y float, accel_z float, magneto_x float, magneto_y float, magneto_z float);''')
             query_cursor.close()
@@ -53,9 +53,9 @@ class DatabaseService:
             for i in range(len(timestamp_arr)):
                 query_cursor = connection.cursor()
                 insert_query = "INSERT INTO Readings (timestamp,heart_rate,oxygen,accel_x,accel_y,accel_z, magneto_x, magneto_y, magneto_z) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-                insert_query_values = (timestamp_arr[i],heart_arr[i],oxygen_arr[i],temp_arr[i])
+                insert_query_values = (timestamp_arr[i],heart_arr[i],oxygen_arr[i],accel_x[i],accel_y[i],accel_z[i],magneto_x[i],magneto_y[i],magneto_z[i])
                 query_cursor.execute(insert_query,insert_query_values)
-                self.__database_connection.commit()
+                connection.commit()
                 query_cursor.close()
             connection.close()
 

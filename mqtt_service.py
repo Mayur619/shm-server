@@ -31,7 +31,7 @@ class MqttService(Thread):
     def __init__(self,logger,db_client):
         Thread.__init__(self)
         self.__logger = logger
-        self.__client = mqtt.Client(CLIENT_ID)
+        self.__client = mqtt.Client()
         self.__ssl_context = ssl.create_default_context()
         self.__db_client=db_client
 
@@ -78,7 +78,7 @@ class MqttService(Thread):
             self.__client.loop_start()
             self.__client.subscribe(TOPIC)
             while True:
-                time.sleep(10)
+                time.sleep(0.1)
         except Exception as e:
             self.__logger.error("exception main()")
             self.__logger.error("e obj:{}".format(vars(e)))
