@@ -48,6 +48,11 @@ class WebService(Thread):
             return render_template("index.html")
         self.__logger.info("Successfully registered all web routes")
 
+        @self.__app.route("/handle_email",methods = ['POST'])
+        def handle_email():
+            user_addr = request.form['user_email']
+            trusted_addr = request.form['trusted_email']
+
 
 
     def run(self):

@@ -1,0 +1,16 @@
+{
+        "Body": {
+            "Html": {
+                "Charset": "UTF-8",
+                "Data": "Test email body"
+            },
+            "Text": {
+                "Charset": "UTF-8",
+                "Data": "Test text"
+            }
+        },
+        "Subject": {
+            "Charset": "UTF-8",
+            "Data": "Test email"
+        }
+}
