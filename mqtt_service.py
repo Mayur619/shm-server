@@ -22,11 +22,6 @@ CLIENT_ID = config_data['client_id']
 TOPIC = config_data['topic']
 url = "https://{}".format(AWS_IOT_ENDPOINT)
 
-
-
-
-
-
 class MqttService(Thread):
     def __init__(self,logger,db_client):
         Thread.__init__(self)
@@ -58,7 +53,18 @@ class MqttService(Thread):
         timestamps = self.__generate_timestamps(number_of_readings,delay//1000)
         self.__db_client.insert_records(timestamps,parsed_json["heart_rate_readings"],parsed_json["oxygen_level_readings"],
         parsed_json["accel_x"],parsed_json["accel_y"],parsed_json["accel_z"],parsed_json["magneto_x"],parsed_json["magneto_y"],parsed_json["magneto_z"])
+        self.validate_readings(parsed_json["oxygen_level_readings"],parsed_json["heart_rate_readings"])
         self.__logger.info("Successfully inserted {} records in the database".format(number_of_readings))
+    '''
+    def validate_readings(self,oxygen,heart_rate):
+        json.load(open("Emails.json"))
+        if oxygen<95 or oxygen>100:
+
+
+        if heart_rate>90 or heart_rate<60:
+    '''        
+
+
     def __generate_timestamps(self,n,delay):
         #current_timestamp = datetime.fromtimestamp(int(time.time()))
         #result = [current_timestamp.strftime('%Y-%m-%d %H:%M:%S')]
