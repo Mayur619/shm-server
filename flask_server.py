@@ -2,6 +2,7 @@ from flask import Flask, render_template, send_from_directory,make_response,json
 from flask_cors import CORS,cross_origin
 from threading import Thread
 import json
+from flask import request
 
 class WebService(Thread):
     def __init__(self,logger,db_client):
