@@ -65,7 +65,7 @@ class WebService(Thread):
             with open('Emails.json', 'w') as outfile:
                 json.dump(data, outfile)
 
-            self.__logger.info("Successfully entered email address", user_addr, trusted_addr)
+            self.__logger.info("Successfully entered email address {0}, {1}".format(user_addr, trusted_addr))
             return "Successfully sent Email"
 
 
