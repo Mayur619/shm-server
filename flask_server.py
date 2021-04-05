@@ -52,7 +52,7 @@ class WebService(Thread):
 
         @self.__app.route("/handle_email",methods = ['POST'])
         def handle_email():
-            data = {}
+            data = {"User_Emails":[],"Trusted_Emails":[]}
             user_addr = request.form['user_email']
             trusted_addr = request.form['trusted_email']
             Em = EmailService(self.__logger)
@@ -64,7 +64,7 @@ class WebService(Thread):
 
             with open('Emails.json', 'w') as outfile:
                 json.dump(data, outfile)
-            
+
             self.__logger.info("Successfully entered email address", user_addr, trusted_addr)
             return "Successfully sent Email"
 
