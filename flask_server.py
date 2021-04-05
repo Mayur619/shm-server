@@ -52,7 +52,7 @@ class WebService(Thread):
 
         @self.__app.route("/handle_email",methods = ['POST'])
         def handle_email():
-            data = {"User_Emails":,"Trusted_Emails":}
+            data = {"User_Emails":"","Trusted_Emails":""}
             user_addr = request.form['user_email']
             trusted_addr = request.form['trusted_email']
             Em = EmailService(self.__logger)
