@@ -3,6 +3,7 @@ from flask_cors import CORS,cross_origin
 from threading import Thread
 import json
 from flask import request
+from email_service import EmailService
 
 class WebService(Thread):
     def __init__(self,logger,db_client):
@@ -53,9 +54,13 @@ class WebService(Thread):
         def handle_email():
             user_addr = request.form['user_email']
             trusted_addr = request.form['trusted_email']
+            Em = EmailService(self.__logger)
+            Em.send_verification_email(user_addr)
+            Em.send_verification_email(trusted_addr)
+
 
             self.__logger.info("Successfully entered email address", user_addr, trusted_addr)
-
+            return "Successfully sent Email"
 
 
     def run(self):
