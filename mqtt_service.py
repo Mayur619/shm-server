@@ -6,7 +6,7 @@ import logging, traceback
 import paho.mqtt.client as mqtt
 import json
 import time
-
+from email_service import EmailService
 from threading import Thread
 from datetime import datetime, timedelta
 
@@ -55,15 +55,20 @@ class MqttService(Thread):
         parsed_json["accel_x"],parsed_json["accel_y"],parsed_json["accel_z"],parsed_json["magneto_x"],parsed_json["magneto_y"],parsed_json["magneto_z"])
         self.validate_readings(parsed_json["oxygen_level_readings"],parsed_json["heart_rate_readings"])
         self.__logger.info("Successfully inserted {} records in the database".format(number_of_readings))
-    '''
-    def validate_readings(self,oxygen,heart_rate):
-        json.load(open("Emails.json"))
-        if oxygen<95 or oxygen>100:
 
+    def validate_readings(self,oxygen_arr,heart_rate_arr):
+        Email_data = json.load(open("Emails.json"))
+        Em = EmailService(self.__logger)
 
-        if heart_rate>90 or heart_rate<60:
-    '''        
-
+        for oxygen in oxygen_arr:
+            if oxygen<95 or oxygen>100:
+                Em.send_alert_notification(Email_data["User_Emails"])
+                Em.send_alert_notification(Email_data["Trusted_Emails"])
+                
+        for heart_rate in heart_rate_arr:
+            if heart_rate>90 or heart_rate<60:
+                Em.send_alert_notification(Email_data["User_Emails"])
+                Em.send_alert_notification(Email_data["Trusted_Emails"])
 
     def __generate_timestamps(self,n,delay):
         #current_timestamp = datetime.fromtimestamp(int(time.time()))
