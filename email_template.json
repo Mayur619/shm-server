@@ -2,7 +2,7 @@
         "Body": {
             "Html": {
                 "Charset": "UTF-8",
-                "Data": "Test email body"
+                "Data": "Hello, your heart rate/oxygen levels are abnormal. Please seek medical attention."
             },
             "Text": {
                 "Charset": "UTF-8",
@@ -11,6 +11,6 @@
         },
         "Subject": {
             "Charset": "UTF-8",
-            "Data": "Test email"
+            "Data": "Heart rate/oxygen alert"
         }
 }
