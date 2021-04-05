@@ -53,6 +53,8 @@ class WebService(Thread):
             user_addr = request.form['user_email']
             trusted_addr = request.form['trusted_email']
 
+            self.__logger.info("Successfully entered email address", user_addr, trusted_addr)
+
 
 
     def run(self):
