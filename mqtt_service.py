@@ -62,13 +62,11 @@ class MqttService(Thread):
 
         for oxygen in oxygen_arr:
             if oxygen<95 or oxygen>100:
-                Em.send_alert_notification(Email_data["User_Emails"])
-                Em.send_alert_notification(Email_data["Trusted_Emails"])
-                
+                Em.send_alert_notification([Email_data["User_Emails"],Email_data["Trusted_Emails"]])
+
         for heart_rate in heart_rate_arr:
             if heart_rate>90 or heart_rate<60:
-                Em.send_alert_notification(Email_data["User_Emails"])
-                Em.send_alert_notification(Email_data["Trusted_Emails"])
+                Em.send_alert_notification([Email_data["User_Emails"],Email_data["Trusted_Emails"]])
 
     def __generate_timestamps(self,n,delay):
         #current_timestamp = datetime.fromtimestamp(int(time.time()))
