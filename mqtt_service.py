@@ -51,8 +51,7 @@ class MqttService(Thread):
         number_of_readings = len(parsed_json["oxygen_level_readings"])
         delay = parsed_json["delay_interval"]
         timestamps = self.__generate_timestamps(number_of_readings,delay//1000)
-        self.__db_client.insert_records(timestamps,parsed_json["heart_rate_readings"],parsed_json["oxygen_level_readings"],
-        parsed_json["accel_x"],parsed_json["accel_y"],parsed_json["accel_z"],parsed_json["magneto_x"],parsed_json["magneto_y"],parsed_json["magneto_z"])
+        self.__db_client.insert_records(timestamps,parsed_json["heart_rate_readings"],parsed_json["oxygen_level_readings"],parsed_json["accel_x"],parsed_json["accel_y"],parsed_json["accel_z"],parsed_json["magneto_x"],parsed_json["magneto_y"],parsed_json["magneto_z"])
         self.validate_readings(parsed_json["oxygen_level_readings"],parsed_json["heart_rate_readings"])
         self.__logger.info("Successfully inserted {} records in the database".format(number_of_readings))
 
