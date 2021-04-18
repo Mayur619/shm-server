@@ -76,8 +76,8 @@ class MqttService(Thread):
             data.append(current_activity)
             self.__logger.info("{}".format(data))
             with open('activity.csv','a') as file:
-                writer = writer(file)
-                writer.writerow(data)
+                writer_ = writer(file)
+                writer_.writerow(data)
                 file.close()
 
             self.buffer = []
