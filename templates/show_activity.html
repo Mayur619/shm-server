@@ -13,15 +13,13 @@ td {
 	<table>
 		<tr>
 			<th>Timestamp</th>
-			<th>Activity</th>
+			<th>Activity Page</th>
 		</tr>
 			{% for record in records %}
 				<tr>
-				{% for i in range(record|length)%}
 					<td>
-						{{record[i]}}
+						{{record}}
 					</td>
-				{% endfor %}
 				</tr>
 			{% endfor %}
 	<table>
