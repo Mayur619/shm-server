@@ -17,9 +17,11 @@ td {
 		</tr>
 			{% for record in records %}
 				<tr>
+				{% for i in range(record|length)%}
 					<td>
-						{{record}}
+						{{record[i]}}
 					</td>
+				{% endfor %}
 				</tr>
 			{% endfor %}
 	<table>

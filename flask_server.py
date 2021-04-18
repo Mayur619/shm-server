@@ -5,6 +5,7 @@ import json
 from flask import request
 from email_service import EmailService
 import pandas as pd
+from csv import reader
 
 class WebService(Thread):
     def __init__(self,logger,db_client):
@@ -26,8 +27,8 @@ class WebService(Thread):
 
         @self.__app.route("/activity_page",methods = ['GET'])
         def activity():
-            activities = pd.read_csv("activity.csv")
-            return render_template("show_activity.html",records = activities)
+            records = reader(open("activity.csv","r"))
+            return render_template("show_activity.html",records = list(records))
 
 
 
