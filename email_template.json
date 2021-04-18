@@ -1,0 +1,16 @@
+{
+        "Body": {
+            "Html": {
+                "Charset": "UTF-8",
+                "Data": "Hello, your heart rate/oxygen levels are abnormal. Please seek medical attention."
+            },
+            "Text": {
+                "Charset": "UTF-8",
+                "Data": "Test text"
+            }
+        },
+        "Subject": {
+            "Charset": "UTF-8",
+            "Data": "Heart rate/oxygen alert"
+        }
+}

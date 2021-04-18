@@ -14,7 +14,7 @@ class DatabaseService:
         #self.init_connection()
 
         #con = self.__database_connection.cursor()
-        self.__connection_pool = MySQLConnectionPool(pool_size=10,pool_name="Database pool",
+        self.__connection_pool = MySQLConnectionPool(pool_size=10,pool_name="DatabasePool",
                                                      host = self.config_data["host"],
                                                      database = self.config_data["dbname"],
                                                      user = self.config_data["username"],
@@ -29,7 +29,7 @@ class DatabaseService:
         self.__database_connection = mysqlCon.connect(
         host=self.config_data['host'],
         user=self.config_data['username'],
-        password=self.config_data['password'], 
+        password=self.config_data['password'],
         db= self.config_data['dbname'])
     def create_table(self):
         #if not self.__database_connection.is_connected():
@@ -37,23 +37,25 @@ class DatabaseService:
         connection = self.__connection_pool.get_connection()
         if connection.is_connected():
             query_cursor=connection.cursor()
-            query_cursor.execute("create table if not exists `Readings`(R_ID int primary key auto_increment,timestamp mediumtext,heart_rate int, oxygen int, temperature float);")
+            query_cursor.execute("drop table if exists Readings")
+            query_cursor.execute('''create table if not exists `Readings`(R_ID int primary key auto_increment,timestamp mediumtext,
+            heart_rate int, oxygen int, accel_x float, accel_y float, accel_z float, magneto_x float, magneto_y float, magneto_z float);''')
             query_cursor.close()
             connection.close()
 
     def get_db_connection(self):
         return self.__database_connection
-    def insert_records(self,timestamp_arr,heart_arr,oxygen_arr,temp_arr):
+    def insert_records(self,timestamp_arr,heart_arr,oxygen_arr,accel_x,accel_y,accel_z, magneto_x, magneto_y, magneto_z):
         #if not self.__database_connection.is_connected():
         #    self.init_connection()
         connection = self.__connection_pool.get_connection()
         if connection.is_connected():
             for i in range(len(timestamp_arr)):
                 query_cursor = connection.cursor()
-                insert_query = "INSERT INTO Readings (timestamp,heart_rate,oxygen,temperature) values(%s,%s,%s,%s)"
-                insert_query_values = (timestamp_arr[i],heart_arr[i],oxygen_arr[i],temp_arr[i])
+                insert_query = "INSERT INTO Readings (timestamp,heart_rate,oxygen,accel_x,accel_y,accel_z, magneto_x, magneto_y, magneto_z) values(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                insert_query_values = (timestamp_arr[i],heart_arr[i],oxygen_arr[i],accel_x[i],accel_y[i],accel_z[i],magneto_x[i],magneto_y[i],magneto_z[i])
                 query_cursor.execute(insert_query,insert_query_values)
-                self.__database_connection.commit()
+                connection.commit()
                 query_cursor.close()
             connection.close()
 
@@ -69,7 +71,7 @@ class DatabaseService:
             select_cursor.close()
             connection.close()
             return select_query_result
-    
+
     def generate_heartRate_json(self):
         #if not self.__database_connection.is_connected():
         #    self.init_connection()
@@ -82,7 +84,7 @@ class DatabaseService:
             select_cursor.close()
             connection.close()
             return heart_rate_data
-    
+
     def generate_oxygenLevels_json(self):
         #if not self.__database_connection.is_connected():
         #    self.init_connection()
@@ -95,7 +97,7 @@ class DatabaseService:
             select_cursor.close()
             connection.close()
             return oxygen_level_data
-    
+    '''
     def generate_temperature_json(self):
         #if not self.__database_connection.is_connected():
         #    self.init_connection()
@@ -109,24 +111,26 @@ class DatabaseService:
             select_cursor.close()
             connection.close()
             return temperature_data
-    
+    '''
+
     def generate_heartRate_csv(self):
         connection = self.__connection_pool.get_connection()
         df = pd.read_sql("select timestamp,heart_rate from Readings order by timestamp",connection)
         connection.close()
         return df
-    
+
     def generate_oxygen_csv(self):
         connection = self.__connection_pool.get_connection()
         df = pd.read_sql("select timestamp,oxygen from Readings",connection)
         connection.close()
         return df
-    
+    '''
     def generate_temperature_csv(self):
         connection = self.__connection_pool.get_connection()
         df = pd.read_sql("select timestamp,temperature from Readings",connection)
         connection.close()
         return df
+    '''
 
 
 #S = SHM_database(logging.getLogger())

@@ -2,6 +2,8 @@ from flask import Flask, render_template, send_from_directory,make_response,json
 from flask_cors import CORS,cross_origin
 from threading import Thread
 import json
+from flask import request
+from email_service import EmailService
 
 class WebService(Thread):
     def __init__(self,logger,db_client):
@@ -18,8 +20,8 @@ class WebService(Thread):
         def records():
             return render_template("show_records.html",
                                    records = self.__db_client.get_records())
-        
-        
+
+
         @self.__app.route("/chart/<name>",methods = ['GET'])
         def show_chart(name):
             if name == 'heartrate':
@@ -29,8 +31,8 @@ class WebService(Thread):
             else:
                 template_name = "show_temperature.html"
             return render_template(template_name)
-        
-        
+
+
         @self.__app.route("/data/<path:path>")
         @cross_origin()
         def send_json(path):
@@ -40,16 +42,33 @@ class WebService(Thread):
                 json_data=self.__db_client.generate_oxygenLevels_json()
             elif path=="temperature.json":
                 json_data=self.__db_client.generate_temperature_json()
-            
+
             return jsonify(json_data)
-        
+
         @self.__app.route("/",methods = ['GET'])
         def index():
             return render_template("index.html")
         self.__logger.info("Successfully registered all web routes")
-        
-        
-        
+
+        @self.__app.route("/handle_email",methods = ['POST'])
+        def handle_email():
+            data = {"User_Emails":"","Trusted_Emails":""}
+            user_addr = request.form['user_email']
+            trusted_addr = request.form['trusted_email']
+            Em = EmailService(self.__logger)
+            Em.send_verification_email(user_addr)
+            Em.send_verification_email(trusted_addr)
+
+            data["User_Emails"] = user_addr
+            data["Trusted_Emails"] = trusted_addr
+
+            with open('Emails.json', 'w') as outfile:
+                json.dump(data, outfile)
+
+            self.__logger.info("Successfully entered email address {0}, {1}".format(user_addr, trusted_addr))
+            return "Successfully sent Email"
+
+
     def run(self):
         self.__logger.info("Initializing web server")
         self.__config_cors()
