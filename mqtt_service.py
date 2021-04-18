@@ -1,7 +1,7 @@
 import sys
 import ssl
 import time
-import csv
+from csv import writer
 import datetime
 import logging, traceback
 import paho.mqtt.client as mqtt
@@ -74,7 +74,7 @@ class MqttService(Thread):
             ts = time.time()
             data.append(ts)
             data.append(current_activity)
-
+            self.__logger.info("{}".format(data))
             with open('activity.csv','a') as file:
                 writer = writer(file)
                 writer.writerow(data)
