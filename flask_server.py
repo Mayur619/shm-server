@@ -4,6 +4,7 @@ from threading import Thread
 import json
 from flask import request
 from email_service import EmailService
+import pandas as pd
 
 class WebService(Thread):
     def __init__(self,logger,db_client):
@@ -12,14 +13,22 @@ class WebService(Thread):
         self.__db_client = db_client
         self.__app = Flask(__name__)
         self.__create_routes()
+
     def __config_cors(self):
         self.__app.config['CORS_HEADERS'] = 'Content-Type'
-        cors = CORS(self.__app,resources = {r'/data/*':{'origins':'http://18.234.181.159:5000/'}})
+        cors = CORS(self.__app,resources = {r'/data/*':{'origins':'http://52.207.155.82:5000/'}})
+
     def __create_routes(self):
         @self.__app.route("/records",methods = ['GET'])
         def records():
             return render_template("show_records.html",
                                    records = self.__db_client.get_records())
+
+        @self.__app.route("/activity_page",methods = ['GET'])
+        def activity():
+            activities = pd.read_csv("activity.csv")
+            return render_template("show_activity.html",records = activities)
+
 
 
         @self.__app.route("/chart/<name>",methods = ['GET'])

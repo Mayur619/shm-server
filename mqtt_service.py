@@ -1,6 +1,7 @@
 import sys
 import ssl
 import time
+import csv
 import datetime
 import logging, traceback
 import paho.mqtt.client as mqtt
@@ -9,6 +10,7 @@ import time
 from email_service import EmailService
 from threading import Thread
 from datetime import datetime, timedelta
+from activity_classifier import ActivityClassifier
 
 config_data = json.load(open("./config/mqtt_config.json","r"))
 
@@ -29,6 +31,9 @@ class MqttService(Thread):
         self.__client = mqtt.Client()
         self.__ssl_context = ssl.create_default_context()
         self.__db_client=db_client
+        self.counter = 0
+        self.buffer = []
+        self.classifier = ActivityClassifier()
 
     def __config_ssl(self):
         try:
@@ -45,7 +50,9 @@ class MqttService(Thread):
         self.__client.connect(AWS_IOT_ENDPOINT,PORT)
         self.__logger.info("Successfully connected to broker")
         self.__client.on_message=self.__on_receive_callback
+
     def __on_receive_callback(self,client,userdata,message):
+
         parsed_json = json.loads(str(message.payload.decode('utf-8')))
         self.__logger.info("Message received:{0}".format(parsed_json))
         number_of_readings = len(parsed_json["oxygen_level_readings"])
@@ -54,6 +61,27 @@ class MqttService(Thread):
         self.__db_client.insert_records(timestamps,parsed_json["heart_rate_readings"],parsed_json["oxygen_level_readings"],parsed_json["accel_x"],parsed_json["accel_y"],parsed_json["accel_z"],parsed_json["magneto_x"],parsed_json["magneto_y"],parsed_json["magneto_z"])
         self.validate_readings(parsed_json["oxygen_level_readings"],parsed_json["heart_rate_readings"])
         self.__logger.info("Successfully inserted {} records in the database".format(number_of_readings))
+
+        for i in range(5):
+            row = []
+            row = [parsed_json["heart_rate_readings"][i],parsed_json["accel_x"][i],parsed_json["accel_y"][i],parsed_json["accel_z"][i],parsed_json["magneto_x"][i],parsed_json["magneto_y"][i],parsed_json["magneto_z"][i]]
+            self.buffer.append(row)
+        self.counter+=1
+
+        if self.counter == 6:
+            data = []
+            current_activity = self.classifier.predict(self.buffer)
+            ts = time.time()
+            data.append(ts)
+            data.append(current_activity)
+
+            with open('activity.csv','a') as file:
+                writer = writer(file)
+                writer.writerow(data)
+                file.close()
+
+            self.buffer = []
+            self.counter = 0
 
     def validate_readings(self,oxygen_arr,heart_rate_arr):
         Email_data = json.load(open("Emails.json"))
