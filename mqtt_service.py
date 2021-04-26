@@ -71,8 +71,10 @@ class MqttService(Thread):
         if self.counter == 6:
             data = []
             current_activity = self.classifier.predict(self.buffer)
-            ts = time.time()
-            data.append(int(ts))
+            #ts = time.time()
+            now = datetime.now()
+            date_time = now.strftime("%m/%d/%Y  %H:%M:%S")
+            data.append(date_time)
             data.append(current_activity)
             self.__logger.info("{}".format(data))
             with open('activity.csv','a') as file:
